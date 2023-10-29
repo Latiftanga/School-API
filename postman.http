@@ -1,2 +1,19 @@
+## Ping server
 GET http://localhost:3000/ping HTTP/1.1
 content-type: application/json
+
+### login
+POST http://localhost:3000/api/users/login HTTP/1.1
+content-type: application/json
+
+{
+    "email": "user4@eg.com",
+    "password": "user4@pass"
+}
+
+### Get all active users
+GET http://localhost:3000/api/users HTTP/1.1
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiZW1haWwiOiJ1c2VyNEBlZy5jb20iLCJyb2xlIjoiQURNSU4iLCJhY3RpdmUiOnRydWUsImlhdCI6MTY5ODU3MDk2Nn0.JIceHIqQ4Y-A_piPpAxvqK7lMvv0kuYarrN7EgR8gfU
+
+
