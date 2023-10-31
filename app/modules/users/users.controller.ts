@@ -13,9 +13,11 @@ export const createUserHandler = async (
     try {
         const user = await createUser(input)
         return reply.code(201).send(user)
-    } catch (e) {
-        console.log(e)
-        reply.code(500).send(e);
+    } catch (e: any) {
+        if(e.code == 'P2002'){
+            return reply.code(409).send({Error: 'Email already exists'})
+        }
+        return reply.code(500).send(e);
     }
 }
 export const loginHandler =async (

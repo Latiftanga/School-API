@@ -5,6 +5,10 @@ import { userSchemas } from './modules/users/users.schema';
 import { fastifyJwt } from '@fastify/jwt';
 
 // Define routes and plugins.
+server.get('/ping', async (request: FastifyRequest, reply: FastifyReply) => {
+  reply.send({message: 'Ok'});
+});
+
 server.register(fastifyJwt, {secret: 'diew0qiwieonsiradnaririeqirnqirir'});
 server.decorate('auth',async (request:FastifyRequest, reply:FastifyReply) => {
   try {
@@ -13,9 +17,6 @@ server.decorate('auth',async (request:FastifyRequest, reply:FastifyReply) => {
     return reply.send(e)
   }
 })
-server.get('/ping', async (request: FastifyRequest, reply: FastifyReply) => {
-  reply.send({message: 'Ok'});
-});
 
 for(const schema of userSchemas){
   server.addSchema(schema)

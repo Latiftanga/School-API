@@ -7,6 +7,17 @@ declare module 'fastify' {
     auth: any
   }
 }
+
+declare module '@fastify/jwt' {
+  interface FastifyJwt {
+    user: {
+      id: string,
+      email: string,
+      role: string,
+      active: boolean
+    }
+  }
+}
 // Start the server.
 server.listen({ port: 3000 }, (err, address) => {
   if (err) {

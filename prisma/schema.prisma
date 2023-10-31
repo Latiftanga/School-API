@@ -10,6 +10,28 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum SchoolLevels {
+  BASIC
+  SHS
+}
+model School {
+  id              Int       @id @unique @default(autoincrement())
+  level           SchoolLevels
+  name            String    @db.VarChar(255)
+  regd_no         String?   @db.VarChar(255)
+  motto           String?   @db.VarChar(255)
+  address         String
+  postal_code     String?
+  phone           String?
+  city            String
+  region          String
+  logo            String?   @db.VarChar(255)
+  students        Student[]
+  active          Boolean   @default(true)
+
+  @@map("schools")
+}
+
 model User {
   id        Int     @id @default(autoincrement())
   email     String  @db.VarChar(255) @unique
@@ -18,10 +40,26 @@ model User {
   role      String?
   active    Boolean @default(true)
   student   Student?
-
+  guardian  Guardian?
   @@map("users")
 }
 
+model Programme {
+  id              Int       @id @unique @default(autoincrement())
+  name            String    @db.VarChar(255)@unique
+  code            String?   @db.VarChar(255)@unique
+  students        Student[]
+
+  @@map("programmes")
+}
+
+model Grade {
+  id              Int       @id @unique @default(autoincrement())
+  name            String    @unique @db.VarChar(255)
+  short_name      String    @unique
+  students        Student[]
+  @@map("grades")
+}
 model Student {
   admission_id    String    @id @unique
   admission_date  DateTime  @default(now())
@@ -33,10 +71,45 @@ model Student {
   address         String
   city            String
   region          String
-  account         User?     @relation(fields: [account_id], references: [id])
-  account_id      Int?      @unique
-  image           String?   @db.VarChar(255)
-  active          Boolean   @default(true)
+  account         User?       @relation(fields: [account_id], references: [id])
+  account_id      Int?        @unique
+  image           String?     @db.VarChar(255)
+  school          School      @relation(fields: [school_id], references: [id])
+  school_id       Int
+  programme       Programme?  @relation(fields: [programme_id], references: [id])
+  programme_id    Int?
+  grade           Grade       @relation(fields: [grade_id], references: [id])
+  grade_id        Int
+  active          Boolean     @default(true)
+  guardians       StudentGuardians[]
 
   @@map("students")
 }
+
+model Guardian {
+  id              Int       @id @default(autoincrement())
+  title           String    @db.VarChar(255)
+  firstname       String    @db.VarChar(255)
+  othernames      String    @db.VarChar(255)
+  gender          String    @db.VarChar(1)
+  relation        String    @db.VarChar(255)
+  phone           String?
+  address         String
+  city            String
+  region          String
+  account         User?     @relation(fields: [account_id], references: [id])
+  account_id      Int?      @unique
+  students        StudentGuardians[]
+
+  @@map("guardians")
+}
+model StudentGuardians {
+  student         Student   @relation(fields: [student_id], references: [admission_id])
+  student_id      String
+  guardian        Guardian  @relation(fields: [guardian_id], references: [id])
+  guardian_id     Int
+  assigned_at     DateTime  @default(now())
+  assigned_by     String
+  @@id([student_id, guardian_id])
+}
+

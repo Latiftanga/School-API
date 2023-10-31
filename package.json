@@ -9,6 +9,9 @@
   "scripts": {
     "dev": "tsnd --respawn --transpile-only --exit-child app/index.ts"
   },
+  "prisma": {
+    "seed": "ts-node --transpile-only prisma/seed.ts"
+  },
   "dependencies": {
     "@fastify/jwt": "^7.2.2",
     "@prisma/client": "^5.5.2",

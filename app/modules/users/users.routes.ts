@@ -13,6 +13,7 @@ export const userRoutes = async(server: FastifyInstance) => {
     }, loginHandler);
 
     server.post('/',{
+        preHandler: [server.auth],
         schema: {
             body: $ref('createUserSchema'),
             response: {
